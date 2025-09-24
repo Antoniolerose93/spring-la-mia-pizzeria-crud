@@ -1,0 +1,41 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.8/css/bootstrap.min.css}" />
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+    <title>Pizze</title>
+</head>
+
+<body>
+    <div class="container">
+        <nav th:replace="~{navbar :: navbar('Pizze')}"></nav>
+        <h1 class="text-center py-3">Pizze</h1>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">Nome</th>
+                    <th scope="col">Descrizione</th>
+                    <th scope="col">Prezzo</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="item : ${list}">
+                    <td th:text="${item.nome}"></td>
+                    <td th:text="${item.descrizione}"></td>
+                    <td th:text="${item.prezzo}"></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="alert alert-primary" role="alert" th:unless="${list.size()>0}"> 
+            There is no pizze in database
+        </div>
+    </div>
+
+    <script th:src="@{/webjars/bootstrap/5.3.8/js/bootstrap.bundle.min.js}"></script>
+</body>
+
+</html>
