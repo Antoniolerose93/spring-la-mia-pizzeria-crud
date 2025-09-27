@@ -1,0 +1,45 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.8/css/bootstrap.min.css}" />
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+    <title th:unless="${empty}" th:text ="${pizza.nome}"></title>
+    <title th:if="${empty}">Pizza non trovata</title>"
+    
+
+</head>
+
+
+<body>
+    <nav th:replace="~{navbar :: navbar('Pizze')}"></nav> 
+    <!-- th:replace="~{nomeFile :: nomeFrammento(parametri)}" il file del frammetno è navbar.html, quindi navbar, il frammento si chiama navbar quindi :: navbar, il parametro è current quindi Pizze-->
+        <div class="container" th:object="${pizza}" th:unless="${empty}">
+            <h1 th:text="*{nome}"></h1>
+            <h2 th:text="|Ingredients *{descrizione}|"></h2> 
+            <!-- | serve per concatenare -->
+            <hr/>
+            <div class="row">
+                <div class ="col-8">
+                    <dl>
+                        <dt>Descrizione</dt>
+                        <dd th:text="*{descrizione}"></dd>
+                        <dt>Nome</dt>
+                        <dd th:text="*{nome}"></dd>
+                        <dt>Prezzo</dt>
+                        <dd th:text="*{prezzo} + 'euro €'"></dd>
+                
+                    </dl>
+                </div>
+            </div>
+        <div class = "container" th:if="${empty}">
+            <h1>Pizza non trovata</h1>
+        </div>    
+        </div>
+
+    <script th:src="@{/webjars/bootstrap/5.3.8/js/bootstrap.bundle.min.js}"></script>
+</body>
+
+</html>

@@ -26,6 +26,10 @@ private String descrizione;
 
 private int prezzo;
 
+public Integer getId() {
+        return id;
+    }
+
 public String getNome() {
     return nome;
 }
