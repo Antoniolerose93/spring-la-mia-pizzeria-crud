@@ -11,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequestMapping("/pizze")
@@ -22,11 +23,25 @@ public class Pizzacontroller {
     private PizzaRepository repository;
 
 @GetMapping //Questo metodo risponde a richieste HTTP Get all'URL associato al controller
-public String index (Model model) { //index è il nome della pagina che deve essere renderizzata. Model model è un contenitore che serve a passare dati dal controller alla pagina.
-    List<Pizza> result = repository.findAll(); //usa PizzaRepository per recuperare tutte le pizze dal database. findAll è un metodo ereditato da JpaRepository
-    model.addAttribute("list", result);
-    return "/pizze/index";
+public String index (Model model, @RequestParam(name="keyword", required=false)String keyword) { 
+//index è il nome della pagina che deve essere renderizzata. Model model è un contenitore che serve a passare dati dal controller alla pagina.
+    // List<Pizza> result = null;repository.findAll(); 
+    // model.addAttribute("list", result);
+    // return "/pizze/index";
+//Sopra uso PizzaRepository per recuperare tutte le pizze dal database, findAll è un metodo ereditato da JpaRepository
+        
+    //Qui uso invece un filtro per dire che se non mi viene passata una keyword voglio devono tornarmi tutti.
+        List<Pizza> result = null;
+        if (keyword == null || keyword.isBlank()){//isBlank verifica se la stringa della keyword è vuota o contiene solo spazi
+            result = repository.findAll();
+        } else {
+            result = repository.findByNomeContainingIgnoreCase(keyword);
+        } 
+        
+        model.addAttribute("list", result);
+        return "pizze/index";       
 }
+
 
 @GetMapping ("/show/{id}") 
 //Pathvariable consente di rimanere nell'url aggiungendo un ID
