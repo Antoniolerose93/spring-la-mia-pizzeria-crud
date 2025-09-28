@@ -14,10 +14,21 @@
         <!-- th:replace="~{nomeFile :: nomeFrammento(parametri)}" il file del frammetno è navbar.html, quindi navbar, il frammento si chiama navbar quindi :: navbar, il parametro è current quindi Pizze-->    
     <div class="container">
         <div class="content">    
-        
+        <th:block th:if ="${successMessage !=null}">
+            <div class ="alert alert-warning alter-dismissable fade show" role ="alert">
+                <span th:text="${successMessage}"></span>
+                <button type ="button" class ="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        </th:block>
         <h1 class="text-center py-3">Pizze</h1>
         <hr/>
         <div class="mb-3 d-flex justify-content-between">
+            <a class="btn btn-primary" th:href="@{/pizze/create}">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-patch-plus-fill" viewBox="0 0 16 16">
+                <path d="M10.067.87a2.89 2.89 0 0 0-4.134 0l-.622.638-.89-.011a2.89 2.89 0 0 0-2.924 2.924l.01.89-.636.622a2.89 2.89 0 0 0 0 4.134l.637.622-.011.89a2.89 2.89 0 0 0 2.924 2.924l.89-.01.622.636a2.89 2.89 0 0 0 4.134 0l.622-.637.89.011a2.89 2.89 0 0 0 2.924-2.924l-.01-.89.636-.622a2.89 2.89 0 0 0 0-4.134l-.637-.622.011-.89a2.89 2.89 0 0 0-2.924-2.924l-.89.01zM8.5 6v1.5H10a.5.5 0 0 1 0 1H8.5V10a.5.5 0 0 1-1 0V8.5H6a.5.5 0 0 1 0-1h1.5V6a.5.5 0 0 1 1 0"/>
+                </svg>
+                Aggiungi pizza</a>
+            
             <!-- creiamo un form di ricerca tramite keyword dove l'utente inserirà una keyword e troverà la pizza richiesta -->
             <form method="get" th:action="@{/pizze}">
             <!-- permetto all'utente di cercare un elemento tramite la keyword -->
@@ -44,7 +55,7 @@
                 <tr th:each="item : ${list}">
                     <td th:text="${item.nome}"></td>
                     <td th:text="${item.descrizione}"></td>
-                    <td th:text="${item.prezzo}"></td>
+                    <td th:text="${item.prezzo} + '€'"></td>
                     <td>
                         <a th:href="@{|/pizze/show/${item.id}|}" class="btn btn-primary" >
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-fork-knife" viewBox="0 0 16 16">

@@ -1,10 +1,10 @@
 package org.pizzeria.demo.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.pizzeria.demo.model.Pizza;
 import org.springframework.data.jpa.repository.JpaRepository;
-
 
 
 public interface PizzaRepository extends JpaRepository<Pizza, Integer> { //Pizza è la classe, Integer è la chiave
@@ -12,4 +12,7 @@ public interface PizzaRepository extends JpaRepository<Pizza, Integer> { //Pizza
 //diventa un Bean per ereditarietà ed entra nel contesto di Spring. In questo modo abbiamo lasciato a Spring il controllo delle operazioni
 
     public List<Pizza> findByNomeContainingIgnoreCase(String nome); //Filtro per selezionare gli elementi dal nome
+
+    public Optional<Pizza> findByNome(String nome);
+
 }
