@@ -3,13 +3,14 @@ package org.pizzeria.demo.controller;
 import java.util.List;
 import java.util.Optional;
 
+import org.pizzeria.demo.DemoApplication;
 import org.pizzeria.demo.model.Pizza;
 import org.pizzeria.demo.repository.PizzaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,12 +25,18 @@ import jakarta.validation.Valid;
 @RequestMapping("/pizze")
 public class Pizzacontroller {
 
+    private final DemoApplication demoApplication;
+
     @Autowired //con Autowired richiediamo il controllo delle operazioni di implementazioni dell'interfaccia PizzaRepository.
     //Autowired segna il punto di iniezione perchè la classe Pizzacontroller ha una dipendenza verso PizzaRepository.
     //
     private PizzaRepository repository;
 
-@GetMapping //Questo metodo risponde a richieste HTTP Get all'URL associato al controller
+    Pizzacontroller(DemoApplication demoApplication) {
+        this.demoApplication = demoApplication;
+    }
+
+@GetMapping //Questa annotazione risponde a richieste HTTP Get all'URL associato al controller
 public String index (Model model, @RequestParam(name="keyword", required=false)String keyword) { 
 //index è il nome della pagina che deve essere renderizzata. Model model è un contenitore che serve a passare dati dal controller alla pagina.
     // List<Pizza> result = null;repository.findAll(); 
@@ -55,7 +62,7 @@ public String index (Model model, @RequestParam(name="keyword", required=false)S
 //Come scegliere se usare il PathVariable o il query param? il query param consente di inserire nell'url un ? seguito dal parametro
 //La differenza è di concetto. Se il filtro identifica solo una risorsa occorre il path, se invece il filtro restituisce più risorse è meglio usare il query param
 public String show(@PathVariable("id") Integer id, Model model){
-    Optional <Pizza> optionalPizza = repository.findById(id);  
+    Optional <Pizza> optionalPizza = repository.findById(id);  //Optional è una classe di Java che rappresenta un valore che può essere presente o assente.
     // model.addAttribute("pizza", optionalPizza.get());
     if (optionalPizza.isPresent()) {
         model.addAttribute("pizza", optionalPizza.get());
@@ -79,7 +86,7 @@ public String save(@Valid @ModelAttribute("pizza") Pizza formPizza, BindingResul
         Optional<Pizza> optPizza = repository.findByNome(formPizza.getNome());
         if(optPizza.isPresent()) {
             //qui vuol dire che ha trovato una pizza con stesso nome su db
-            bindingResult.addError(new FieldError("nome", "Nome already present"));
+            bindingResult.addError(new ObjectError("nome", "Nome already present"));
         }
 
             if(bindingResult.hasErrors()) {
@@ -89,6 +96,34 @@ public String save(@Valid @ModelAttribute("pizza") Pizza formPizza, BindingResul
         repository.save(formPizza);
         redirectAttributes.addFlashAttribute("successMessage", "Pizza created successifully");
         return "redirect:/pizze";
+    }
+
+@GetMapping("/edit/{id}")
+public String edit
+(@PathVariable ("id") Integer id, Model model) {
+    Optional <Pizza> optPizza = repository.findById(id);
+    Pizza pizza = optPizza.get();
+    model.addAttribute("pizza", pizza);
+    return "/pizze/edit";
+}
+
+ @PostMapping("/edit/{id}")
+    public String update(@Valid @ModelAttribute("pizza") Pizza formPizza, BindingResult bindingResult,
+            Model model) {
+    Optional <Pizza> optPizza = repository.findById(id);
+         if (bindingResult.hasErrors()) {
+            return "/pizze/edit";
+        }
+        System.out.println(formPizza);
+        repository.save(formPizza); 
+        //essendo questo repository uguale a quello sopra come fa a capire 
+        //se sta creando un elemento nuovo o se ne sta modificando uno esistente?
+        //come fa il repository a sapere se siamo in creazione o in modifica?
+        //Quando prende l'elemento che gli passiamo tramite l'id, capisce che c'è già un elemento con quell'id, ed è quello che deve aggiornare.
+        // nella creazione si crea un nuovo ID invece. Nella modifica dice quell'elemento con quell'id esiste già e quindi è quello che deve modificare.
+        
+        return "redirect:/pizze";
+
     }
 
 }
