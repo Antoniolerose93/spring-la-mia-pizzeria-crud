@@ -110,11 +110,25 @@ public String edit
  @PostMapping("/edit/{id}")
     public String update(@Valid @ModelAttribute("pizza") Pizza formPizza, BindingResult bindingResult,
             Model model) {
-    Optional <Pizza> optPizza = repository.findById(id);
+        
+        
+        
+        Pizza oldPizza = repository.findById(formPizza.getId()).get();
+        //inseriamo un blocco, non si può modificare il nome e la descrizione delle pizze
+        if(!oldPizza.getNome().equals(formPizza.getNome())) { //verifichiamo se la vecchia pizza si chiama come la nuova. ! è il not che si mette all'inizio
+            bindingResult.addError(new ObjectError("name", "Cannot change the name"));
+        }
+
+
+        if(!oldPizza.getDescrizione().equals(formPizza.getDescrizione())); {
+            bindingResult.addError(new ObjectError("description", "Cannot change description"));
+        }
+
          if (bindingResult.hasErrors()) {
             return "/pizze/edit";
         }
-        System.out.println(formPizza);
+       
+
         repository.save(formPizza); 
         //essendo questo repository uguale a quello sopra come fa a capire 
         //se sta creando un elemento nuovo o se ne sta modificando uno esistente?
@@ -124,6 +138,13 @@ public String edit
         
         return "redirect:/pizze";
 
+    }
+
+    @PostMapping("/delete/{id}")
+    public String delete (@PathVariable("id") Integer id) {
+        repository.deleteById(id);
+
+        return "redirect:/pizze";
     }
 
 }

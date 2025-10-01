@@ -62,6 +62,9 @@ public void setPrezzo(int prezzo) {
     this.prezzo = prezzo;
 }
 
+public void setId(int id) {
+    this.id = id;
+}
 
 
 }

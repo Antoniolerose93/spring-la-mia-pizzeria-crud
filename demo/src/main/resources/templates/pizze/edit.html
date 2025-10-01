@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.8/css/bootstrap.min.css}" />
     <link rel="stylesheet" th:href="@{/css/app.css}">
-    <title>Pizze</title>
+    <title th:text="|Edit${pizza.nome}|">Edit Pizze</title>
 </head>
 
 <body>
@@ -18,17 +18,26 @@
             <h1 class="text-center py-3">Pizze</h1>
             <hr/>
 
-            <form id="pizza-form" th:object="${pizza}" th:action="@{/pizze/create}" method="post">
-                 <ul th:if="${#fields.hasErrors('*')}">
+           
+            <form id="pizza-form" th:object="${pizza}" th:action="@{/pizze/edit/{id}(id=${pizza.id})}" method="post"> <!-- @{/pizze/edit/{id}(id=${pizza.id})} thymleaf deve attivarsi per sostituire il placeholder -->
+                <ul th:if="${#fields.hasErrors('*')}">
                     <li th:each="err : ${#fields.errors('*')}" th:text="${err}">Input is incorrect</li>
                 </ul>
+                    
                 <div class="row">
                     <!-- dati pizza -->
                     <div class ="col-8">
                         <div class ="row gy-2">
                             <div class="col-12">
+                                <!-- <label class="form-label" for="nome">ID</label> -->
+                                <input id ="id" name="id" type="hidden" th:field="*{id}">
+                                <!-- <div th:if="${#fields.hasErrors('nome')}" class ="invalid-feedback" >
+                                    <ul>
+                                        <li th:each="err : ${#fields.errors('nome')}" th:text="${err}"></li>
+                                    </ul> -->
+                                
                                 <label class="form-label" for="nome">Nome</label>
-                                <input id ="nome" type="text" class="form-control" th:field="*{nome}" th:errorClass ="is-invalid">
+                                <input id ="nome" type="text" class="form-control" th:field="*{nome}" th:errorClass ="is-invalid" readonly  >
                                 <div th:if="${#fields.hasErrors('nome')}" class ="invalid-feedback" >
                                     <ul>
                                         <li th:each="err : ${#fields.errors('nome')}" th:text="${err}"></li>
@@ -37,7 +46,7 @@
                             </div>
                             <div class="col-12">
                                 <label class="form-label" for="descrizione">Descrizione</label>
-                                <input id ="descrizione" type="text" class="form-control" th:field="*{descrizione}" th:errorClass ="is-invalid">
+                                <input id ="descrizione" type="text" class="form-control" th:field="*{descrizione}" th:errorClass ="is-invalid" readonly>
                                  <div th:if="${#fields.hasErrors('descrizione')}" class ="invalid-feedback" >
                                     <ul>
                                         <li th:each="err : ${#fields.errors('descrizione')}" th:text="${err}"></li>
