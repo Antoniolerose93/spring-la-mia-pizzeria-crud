@@ -4,7 +4,9 @@ import java.util.List;
 import java.util.Optional;
 
 import org.pizzeria.demo.DemoApplication;
+import org.pizzeria.demo.model.Offer;
 import org.pizzeria.demo.model.Pizza;
+import org.pizzeria.demo.repository.OfferRepository;
 import org.pizzeria.demo.repository.PizzaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -31,6 +33,9 @@ public class Pizzacontroller {
     //Autowired segna il punto di iniezione perchè la classe Pizzacontroller ha una dipendenza verso PizzaRepository.
     //
     private PizzaRepository repository;
+
+    @Autowired
+    private OfferRepository offerRepository;
 
     Pizzacontroller(DemoApplication demoApplication) {
         this.demoApplication = demoApplication;
@@ -145,6 +150,17 @@ public String edit
         repository.deleteById(id);
 
         return "redirect:/pizze";
+    }
+
+    @GetMapping("/{id}/offer")
+    public String offer(@PathVariable("id") Integer id, Model model) {
+        Offer offer = new Offer();
+        offer.setPizza(repository.findById(id).get());
+
+        model.addAttribute("offer", offer);
+        //Creazione nuovo prestito
+        model.addAttribute("editMode", false);
+        return "/offers/edit";
     }
 
 }
