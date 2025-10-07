@@ -62,6 +62,12 @@ public class Offercontroller {
 
     }
 
+    @PostMapping ("/delete/{id}")
+    public String delete(@PathVariable("id")Integer id) {
+        repository.deleteById(id);
+        return "redirect:/pizze";
+    }
+
 }
 
 

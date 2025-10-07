@@ -8,6 +8,7 @@ import org.pizzeria.demo.model.Offer;
 import org.pizzeria.demo.model.Pizza;
 import org.pizzeria.demo.repository.OfferRepository;
 import org.pizzeria.demo.repository.PizzaRepository;
+import org.pizzeria.demo.repository.IngredientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -36,6 +37,9 @@ public class Pizzacontroller {
 
     @Autowired
     private OfferRepository offerRepository;
+
+    @Autowired 
+    private IngredientRepository ingredientRepository;
 
     Pizzacontroller(DemoApplication demoApplication) {
         this.demoApplication = demoApplication;
@@ -83,11 +87,12 @@ public String show(@PathVariable("id") Integer id, Model model){
 @GetMapping("/create")
 public String create (Model model) {
     model.addAttribute("pizza", new Pizza());
+    model.addAttribute("allIngredients", ingredientRepository.findAll());
     return "/pizze/create";
 }
 
 @PostMapping("/create")
-public String save(@Valid @ModelAttribute("pizza") Pizza formPizza, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+public String save(@Valid @ModelAttribute("pizza") Pizza formPizza, BindingResult bindingResult, Model model , RedirectAttributes redirectAttributes) {
         Optional<Pizza> optPizza = repository.findByNome(formPizza.getNome());
         if(optPizza.isPresent()) {
             //qui vuol dire che ha trovato una pizza con stesso nome su db
@@ -95,11 +100,12 @@ public String save(@Valid @ModelAttribute("pizza") Pizza formPizza, BindingResul
         }
 
             if(bindingResult.hasErrors()) {
-            return "/pizze/create";
+                model.addAttribute("allIngredients", ingredientRepository.findAll());
+                return "/pizze/create";
         }
 
         repository.save(formPizza);
-        redirectAttributes.addFlashAttribute("successMessage", "Pizza created successifully");
+        redirectAttributes.addFlashAttribute("successMessage", "Pizza inserita con successo");
         return "redirect:/pizze";
     }
 
@@ -109,6 +115,7 @@ public String edit
     Optional <Pizza> optPizza = repository.findById(id);
     Pizza pizza = optPizza.get();
     model.addAttribute("pizza", pizza);
+    model.addAttribute("allIngredients", ingredientRepository.findAll());
     return "/pizze/edit";
 }
 
@@ -119,15 +126,15 @@ public String edit
         
         
         Pizza oldPizza = repository.findById(formPizza.getId()).get();
-        //inseriamo un blocco, non si può modificare il nome e la descrizione delle pizze
-        if(!oldPizza.getNome().equals(formPizza.getNome())) { //verifichiamo se la vecchia pizza si chiama come la nuova. ! è il not che si mette all'inizio
-            bindingResult.addError(new ObjectError("name", "Cannot change the name"));
-        }
+        // //inseriamo un blocco, non si può modificare il nome e la descrizione delle pizze
+        // if(!oldPizza.getNome().equals(formPizza.getNome())) { //verifichiamo se la vecchia pizza si chiama come la nuova. ! è il not che si mette all'inizio
+        //     bindingResult.addError(new ObjectError("name", "Cannot change the name"));
+        // }
 
 
-        if(!oldPizza.getDescrizione().equals(formPizza.getDescrizione())); {
-            bindingResult.addError(new ObjectError("description", "Cannot change description"));
-        }
+        // if(!oldPizza.getDescrizione().equals(formPizza.getDescrizione())) {
+        //     bindingResult.addError(new ObjectError("description", "Cannot change description"));
+        // }
 
          if (bindingResult.hasErrors()) {
             return "/pizze/edit";
@@ -147,6 +154,10 @@ public String edit
 
     @PostMapping("/delete/{id}")
     public String delete (@PathVariable("id") Integer id) {
+        Pizza pizza = repository.findById(id).get();
+        for (Offer offerToDelete : pizza.getOffers()) {
+            offerRepository.delete(offerToDelete);
+        }
         repository.deleteById(id);
 
         return "redirect:/pizze";

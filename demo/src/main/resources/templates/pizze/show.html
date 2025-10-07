@@ -33,9 +33,18 @@
                 
                     </dl>
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-12">
+            
+            
+                <div class="col-4">
+                    <h3>Ingredienti</h3>
+                        <ul>
+                        <li th:each="ing : *{ingredients}" th:text="${ing.ingredienti}"></li>
+                        </ul>
+                </div>
+            
+        </div>
+           
+                <div class="col-8">
                     <h3>Offers</h3>
                     <a class ="btn btn-outline-primary" th:href="@{/pizze/{id}/offer(id=${pizza.id})}">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
@@ -71,13 +80,14 @@
                             </tr>
                         </tbody>
                     </table>
+                    </div>
                     <div th:unless="${pizza.offers.size() > 0}">
                         <div class ="alert alert-primary">
                             Non ci sono offerte per questa pizza
                         </div>
                     </div>    
                 </div>
-            </div>
+           
         <div class = "container" th:if="${empty}">
             <h1>Pizza non trovata</h1>
         </div>    
