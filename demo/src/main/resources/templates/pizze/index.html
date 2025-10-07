@@ -59,7 +59,11 @@
                     <td th:text="${item.nome}"></td>
                     <td th:text="${item.descrizione}"></td>
                     <td>
-                        <span th:each ="ing : ${item.ingredients}" th:text="${ing.ingredient} +','"></span>
+                        <span th:each="ing, iterStat : ${item.ingredients}"> <!-- per rimuovere la , alla fine degli ingredienti.
+                            prende gli ingredienti, verifica che non sia l'ultimo ingrediente inserito, e aggiunge una virgola e l'ingrediente succcessivo, 
+                            quando arriva all'ultimo ingrediente non aggiunge più la virgola-->
+                            <span th:text="${ing.ingredient}"></span><span th:if="${!iterStat.last}">, </span>
+                        </span>
                     </td>
                     <td th:text="${item.prezzo} + '€'"></td>
                     

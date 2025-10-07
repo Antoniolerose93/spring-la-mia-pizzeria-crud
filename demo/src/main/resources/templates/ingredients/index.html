@@ -15,7 +15,7 @@
         <h1>Ingredienti</h1>
         <hr />
         <div class="row py-3">
-            <div class="col-4">
+            <div class="col-6">
                 <form id="ingredient-form" th:action="@{/ingredients/create}" method="post" th:object="${ingredientObj}">
                     <ul th:if="${#fields.hasErrors('ingredient')}">
                         <li th:each="err : ${#fields.errors('ingredient')}" th:text="${err}">Input non corretto</li>
