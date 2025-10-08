@@ -54,6 +54,15 @@
                                 </div>
                             </div>
                             <div class="col-12">
+                                <label class="form-label" for="foto">Foto (url)</label>
+                                <input id ="foto" type="text" class="form-control" th:field="*{foto}" th:errorClass ="is-invalid">
+                                 <div th:if="${#fields.hasErrors('foto')}" class ="invalid-feedback" >
+                                    <ul>
+                                        <li th:each="err : ${#fields.errors('foto')}" th:text="${err}"></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="col-12">
                                 <label class="form-label">Ingredienti</label>
                                 <div th:each="ing : ${allIngredients}">
                                 <input type="checkbox" th:value ="${ing.id}" th:field="*{ingredients}" th:errorClass ="is-invalid">
@@ -80,7 +89,7 @@
                                     <path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425z"/>
                                     </svg>
                                     Salva</button>
-                                <a th:href="@{/pizze}" class="btn btn-danger"> Cancella </a>
+                                <a th:href="@{/pizze/}" class="btn btn-danger"> Cancella </a>
                             </div>    
                         </div>
                     </div>

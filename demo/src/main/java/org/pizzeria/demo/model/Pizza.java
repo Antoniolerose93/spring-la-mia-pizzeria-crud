@@ -4,8 +4,6 @@ package org.pizzeria.demo.model;
 
 import java.util.List;
 
-import org.hibernate.annotations.ManyToAny;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -39,6 +37,8 @@ private String nome;
 @NotBlank(message ="descrizione obbligatoria")
 private String descrizione;
 
+@NotBlank(message ="url foto obbligatorio")
+private String foto;
 
 @NotNull
 @Min(value=1)
@@ -86,6 +86,14 @@ public String getDescrizione() {
 
 public void setDescrizione(String descrizione) {
     this.descrizione = descrizione;
+}
+
+public String getFoto(){
+    return foto;
+}
+
+public void setFoto(String foto){
+    this.foto = foto;
 }
 
 public int getPrezzo() {

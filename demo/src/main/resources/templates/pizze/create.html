@@ -45,6 +45,16 @@
                                 </div>
                             </div>
                             <div class="col-12">
+                                <label class="form-label" for="foto">Foto (url)</label>
+                                <input id ="foto" type="text" class="form-control" th:field="*{foto}" th:errorClass ="is-invalid">
+                                 <div th:if="${#fields.hasErrors('foto')}" class ="invalid-feedback" >
+                                    <ul>
+                                        <li th:each="err : ${#fields.errors('foto')}" th:text="${err}"></li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="col-12">
                                 <label class="form-label">Ingredienti</label>
                                 <div th:each="ing : ${allIngredients}">
                                 <input type="checkbox" th:value ="${ing.id}" th:field="*{ingredients}" th:errorClass ="is-invalid">

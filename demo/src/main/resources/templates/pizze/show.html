@@ -28,9 +28,10 @@
                         <dd th:text="*{descrizione}"></dd>
                         <dt>Nome</dt>
                         <dd th:text="*{nome}"></dd>
-                        <dt>Prezzo</dt>
-                        <dd th:text="*{prezzo} + '€'"></dd>
-                
+                        <dt>Foto</dt>
+						<dd>
+                            <img th:src="${pizza.foto}" class="img-fluid" alt="Responsive image">
+						</dd>              
                     </dl>
                 </div>
             
@@ -40,6 +41,8 @@
                         <ul>
                         <li th:each="ing : *{ingredients}" th:text="${ing.ingredient}"></li>
                         </ul>
+                    <h3>Prezzo</h5>    
+                        <div th:text="*{prezzo} + '€'"></div>
                 </div>
             
         </div>

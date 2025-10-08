@@ -85,7 +85,7 @@
 
                     <td>  <!-- colonna per la cancellazione -->
                         <form th:action="@{/pizze/delete/{id}(id=${item.id})}" method="post" >
-                            <button class ="btn btn-primary" type = "submit" id ="submitButton"
+                            <button class ="btn btn-danger" type = "submit" id ="submitButton"
                             onclick ="return confirm('Sei sicuro?')">
 
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">

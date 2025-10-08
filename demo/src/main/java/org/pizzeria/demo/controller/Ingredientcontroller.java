@@ -29,7 +29,9 @@ public class Ingredientcontroller {
     @GetMapping()
     public String index(Model model) {
         model.addAttribute("ingredient", repository.findAll());
-        model.addAttribute("ingredientObj", new Ingredient());
+        model.addAttribute("ingredientObj", new Ingredient()); 
+        //ingredientObj serve come contenitore.
+        //E' un oggetto vuoto che permette di creare un nuovo ingrediente.
 
         return "ingredients/index";
         
